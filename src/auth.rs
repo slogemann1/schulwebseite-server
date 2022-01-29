@@ -5,6 +5,11 @@ use sha2::{ Sha256, Sha512, Digest };
 use rand::rngs::StdRng;
 use rand::{ Rng, SeedableRng };
 
+// Enhaelt eine Liste von Benutzern, mit nuetzlichen Funktionen
+pub struct UserDataCache {
+    list: Vec<UserData>
+}
+
 pub struct UserData {
     username: String,
     password_hash: String,
@@ -16,6 +21,32 @@ pub enum UserPermission {
     Upload,
     Admin,
     Review
+}
+
+impl UserDataCache {
+    pub fn new() -> Self {
+        Self {
+            list: vec![]
+        }
+    }
+
+    pub fn add(&mut self, user: UserData) {
+        self.list.push(user);
+    }
+
+    pub fn clear(&mut self) {
+        self.list = vec![];
+    }
+
+    pub fn get_user<'a>(&'a self, username: &str) -> Option<&'a UserData> {
+        for user in &self.list {
+            if user.get_username() == username {
+                return Some(user);
+            }
+        }
+
+        None
+    }
 }
 
 impl UserData {
