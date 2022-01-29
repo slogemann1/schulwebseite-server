@@ -1,4 +1,5 @@
 mod website;
+mod auth;
 
 static ROOT_DIRECTORY: &str = "data";
 

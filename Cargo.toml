@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 actix-web = "3"
+rand = "0.8"
+sha2 = "0.9"
