@@ -6,10 +6,12 @@ use rand::rngs::StdRng;
 use rand::{ Rng, SeedableRng };
 
 // Enhaelt eine Liste von Benutzern, mit nuetzlichen Funktionen
+#[derive(Debug)]
 pub struct UserDataCache {
     list: Vec<UserData>
 }
 
+#[derive(Debug, Clone)]
 pub struct UserData {
     username: String,
     password_hash: String,
@@ -17,6 +19,7 @@ pub struct UserData {
     permissions: Vec<UserPermission>
 }
 
+#[derive(Debug, Clone)]
 pub enum UserPermission {
     Upload,
     Admin,
@@ -85,7 +88,7 @@ fn generate_salt(seed_input: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(&seed_input.as_bytes());
     let hash = hasher.finalize();
-    let seed: [u8; 32] = hash.as_slice().try_into().unwrap();
+    let seed: [u8; 32] = hash.as_slice().try_into().unwrap(); // Seed ist immer 32 Bytes lang, da Sha256 verwendet wird
 
 
     // Erstelle Salt aus zufaelligen Buchstaben

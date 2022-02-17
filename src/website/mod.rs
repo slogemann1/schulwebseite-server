@@ -7,6 +7,7 @@ use actix_web::body::Body;
 use crate::file_path_from_root;
 
 mod public;
+mod protected;
 
 pub async fn run() -> std::io::Result<()> {
     // Server definieren und starten
@@ -24,13 +25,13 @@ pub async fn run() -> std::io::Result<()> {
 fn return_ok_or_error<B: Into<Body>>(body: Result<B, Error>) -> impl Responder {
     match body {
         Ok(body) => HttpResponse::Ok().body(body),
-        Err(_) => HttpResponse::InternalServerError().body(get_static_page("internal_error.html").unwrap()) // TODO: Fehlermeldung-Seiten sollten am Anfang geladen werden, falls das Problem beim laden der Dateien liegt
+        Err(_) => HttpResponse::InternalServerError().body(read_static_page("internal_error.html").unwrap()) // TODO: Fehlermeldung-Seiten sollten am Anfang geladen werden, falls das Problem beim laden der Dateien liegt
     }
 }
 
 // Laedt Seite, die nicht dynamisch erstellt wird
 // Seiten koennen nur Text-Dateien sein
-fn get_static_page(file_name: &str) -> std::io::Result<String> {
+fn read_static_page(file_name: &str) -> std::io::Result<String> {
     read_text_file(&file_path_from_root("website/static", file_name))
 }
 
